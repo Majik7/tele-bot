@@ -73,5 +73,7 @@ def defineaword(message):
     responsetext = f"*Definitions :*\n" + "\n".join(f" - {d}" for d in definitions)
 
     bot.reply_to(message, responsetext, parse_mode = "Markdown")
+
+#aaa
     
 bot.infinity_polling()
