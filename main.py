@@ -11,9 +11,9 @@ BOT_TOKEN = os.environ.get('BOT_TOKEN')
 bot = telebot.TeleBot(BOT_TOKEN)
 
 commandlist = [
-    telebot.types.BotCommand("start", "say hello to the bot :)")
-    telebot.types.BotCommand("angrycat", "make an angry cat say something")
-    telebot.types.BotCommand("define", "define a word")
+    telebot.types.BotCommand("start", "say hello to the bot :)"),
+    telebot.types.BotCommand("angrycat", "make an angry cat say something"),
+    telebot.types.BotCommand("define", "define a word"),
 ]
 
 bot.set_my_commands(commandlist)
