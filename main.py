@@ -2,12 +2,21 @@ import requests
 import os
 import telebot
 from dotenv import load_dotenv
+from telebot.types import BotCommand
 
 load_dotenv()
 
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 
 bot = telebot.TeleBot(BOT_TOKEN)
+
+commandlist = [
+    telebot.types.BotCommand("start", "say hello to the bot :)")
+    telebot.types.BotCommand("angrycat", "make an angry cat say something")
+    telebot.types.BotCommand("define", "define a word")
+]
+
+bot.set_my_commands(commandlist)
 
 @bot.message_handler(commands=['start', 'hello'])
 def send_welcome(message):
@@ -65,7 +74,7 @@ def defineaword(message):
                 break
         if len(definitions) == 3:
             break
-
+            
     if not definitions:
         bot.reply_to(message, 'sorry no definitions were found :(')
         return
@@ -73,7 +82,5 @@ def defineaword(message):
     responsetext = f"*Definitions :*\n" + "\n".join(f" - {d}" for d in definitions)
 
     bot.reply_to(message, responsetext, parse_mode = "Markdown")
-
-#aaa
     
 bot.infinity_polling()
