@@ -12,7 +12,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 
 commandlist = [
     telebot.types.BotCommand("start", "say hello to the bot :)"),
-    telebot.types.BotCommand("angrycat", "make an angry cat say something"),
+    telebot.types.BotCommand("catsays", "make a cat say something"),
     telebot.types.BotCommand("define", "define a word"),
 ]
 
@@ -23,13 +23,22 @@ def send_welcome(message):
     bot.reply_to(message, "hello :D i am a new bot")
 
 @bot.message_handler(commands=['angrycat'])
-def catsays(message):
-    args = message.text.partition(' ')[2]
+def catmood(message):
+    bot.reply_to(message, "what is the cat's tag? - \n ")
+    bot.register_next_step_handler(message, cattext)
+
+def cattext(message):
+    catsmood = message.text
+    bot.reply_to(message, "ok now what is the cat saying?")
+    bot.register_next_step_handler(message, catsays, catsmood)
+    
+def catsays(message, catsmood):
+    args = message.text
     if not args:
         bot.reply_to(message, "give something to the cat to say >:(")
         return
 
-    url = f"https://cataas.com/cat/says/{args.replace(' ', '%20')}"  # URL encode spaces
+    url = f"https://cataas.com/cat/{catsmood.replace(' ', '%20')}/says/{args.replace(' ', '%20')}"  # URL encode spaces
     res = requests.get(url)
 
     try:
@@ -46,8 +55,12 @@ def catsays(message):
         bot.send_photo(message.chat.id, f)
 
 @bot.message_handler(commands=['define'])
+def definestart(message):
+    bot.reply_to(message, "what word do you want to define?")
+    bot.register_next_step_handler(message, defineaword)
+    
 def defineaword(message):
-    args = message.text.partition(' ')[2].strip()
+    args = message.text.strip()
     if not args:
         bot.reply_to(message, "tell me a word to define bruh")
         return
